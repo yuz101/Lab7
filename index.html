@@ -85,14 +85,26 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        let endpoint = document.getElementById('endpoint').value;
+        fetch(endpoint)
+          .then(response => response.json())
+          .catch()
+          .then(data => document.getElementById("output").innerHTML = JSON.stringify(data))
+
       }
 
       // This function should fetch one entry from the given endpoint.
       // From the 4 CRUD actions, this is the READ action, and uses the GET http method.
-      // The main difference from fetchAll() will be the URL you request from; check
+      // The main difference from fetchAll() will be the URL y  ou request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        let endpoint = document.getElementById('endpoint').value;
+        const id = window.prompt("Enter record id");
+        let getOne = endpoint + "/" + id;
+        fetch(getOne)
+          .then(response => response.json())
+          .then(data => document.getElementById("output").innerHTML = JSON.stringify(data))
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -101,6 +113,34 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
+        let endpoint = document.getElementById('endpoint').value;
+        if(arguments[0] == 'show'){
+            document.getElementById("recordForm").style.display = "block";
+        }
+        // var xhr = new XMLHttpRequest();
+        // var url = endpoint;
+        // xhr.open("POST", url, true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // document.getElementById("execute").addEventListener("click", output => {
+        //     let author = document.getElementById("author").value;
+        //     let title = document.getElementById("title").value;
+        //     var jsonObj = {"author": author, "title": title, "id": 2};
+        //     document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
+        //     xhr.send(JSON.stringify(jsonObj));
+        let author = document.getElementById("author").value;
+        let title = document.getElementById("title").value;
+        var jsonObj = {"author": author, "title": title};
+        if(arguments[0] == 'submit'){
+            fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(jsonObj)
+            }).then(response => response.json())
+            document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
@@ -109,6 +149,26 @@
       // the writeup to view the URL pattern for create and update
       function updateRecord() {
         // TODO
+        let endpoint = document.getElementById('endpoint').value;
+        if(arguments[0] == 'show'){
+          document.getElementById("recordForm").style.display = "block";
+          document.getElementById("recordIDcontainer").style.display = "block";
+        }
+        let author = document.getElementById("author").value;
+        let title = document.getElementById("title").value;
+        let id = document.getElementById("recordID").value;
+        var jsonObj = {"author": author, "title": title, "id": id};
+        if(arguments[0] == 'submit'){
+          fetch(endpoint, {
+            method: 'PUT',
+            headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+          }).then(response => response.json())
+          document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
+        }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
