@@ -87,10 +87,18 @@
         // TODO
         let endpoint = document.getElementById('endpoint').value;
         fetch(endpoint)
-          .then(response => response.json())
-          .catch()
-          .then(data => document.getElementById("output").innerHTML = JSON.stringify(data))
-
+          .then(function(response){
+            if(response.status != 200){
+              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              return;
+            }
+            response.json().then(function(data){
+              document.getElementById("output").value = JSON.stringify(data);
+            })
+            .catch(function(err){
+              console.log('Fetch Error :-S', err);
+            });
+          })
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -103,8 +111,18 @@
         const id = window.prompt("Enter record id");
         let getOne = endpoint + "/" + id;
         fetch(getOne)
-          .then(response => response.json())
-          .then(data => document.getElementById("output").innerHTML = JSON.stringify(data))
+          .then(function(response){
+            if(response.status != 200){
+              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              return;
+            }
+            response.json().then(function(data){
+              document.getElementById("output").value = JSON.stringify(data)
+            })
+            .catch(function(err){
+              console.log('Fetch Error :-S', err);
+            });
+          })
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -117,16 +135,6 @@
         if(arguments[0] == 'show'){
             document.getElementById("recordForm").style.display = "block";
         }
-        // var xhr = new XMLHttpRequest();
-        // var url = endpoint;
-        // xhr.open("POST", url, true);
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        // document.getElementById("execute").addEventListener("click", output => {
-        //     let author = document.getElementById("author").value;
-        //     let title = document.getElementById("title").value;
-        //     var jsonObj = {"author": author, "title": title, "id": 2};
-        //     document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
-        //     xhr.send(JSON.stringify(jsonObj));
         let author = document.getElementById("author").value;
         let title = document.getElementById("title").value;
         var jsonObj = {"author": author, "title": title};
@@ -138,8 +146,19 @@
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(jsonObj)
-            }).then(response => response.json())
-            document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
+            })
+            // }).then(function(response){
+            //   if(response.status != 200){
+            //     document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+            //     return;
+            //   }
+            .then(response => response.json())
+            .then(data => {
+              document.getElementById("output").value = JSON.stringify(data)
+            })
+            .catch(function(err){
+                console.log('Fetch Error :-S', err);
+            });
         }
       }
 
@@ -158,17 +177,28 @@
         let title = document.getElementById("title").value;
         let id = document.getElementById("recordID").value;
         var jsonObj = {"author": author, "title": title, "id": id};
+        let updateOne = endpoint + "/" + id;
         if(arguments[0] == 'submit'){
-          fetch(endpoint, {
+          fetch(updateOne, {
             method: 'PUT',
             headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonObj)
-          }).then(response => response.json())
-          document.getElementById("output").innerHTML = JSON.stringify(jsonObj);
-        }
+          }).then(function(response){
+            if(response.status != 200){
+              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              return;
+            }
+            response.json().then(function(data){
+              document.getElementById("output").value = JSON.stringify(data)
+            })
+          .catch(function(err){
+            console.log('Fetch Error :-S', err);
+          });
+        })
+      }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -178,6 +208,27 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+        let endpoint = document.getElementById('endpoint').value;
+        const id = window.prompt("Enter record id");
+        let deleteOne = endpoint + "/" + id;
+        fetch(deleteOne, {
+          method: "DELETE",
+          headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+          }
+        }).then(function(response){
+          if(response.status != 200){
+            document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+            return;
+          }
+          response.json().then(function(data){
+            document.getElementById("output").value = JSON.stringify(data)
+          })
+          .catch(function(err){
+            console.log('Fetch Error :-S', err);
+          });
+        })
       }
 
       window.addEventListener('DOMContentLoaded', () => {
