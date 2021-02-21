@@ -85,11 +85,16 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        if(arguments[0] == 'show'){
+            document.getElementById("recordForm").style.display = "block";
+        }else{
+            document.getElementById("recordForm").style.display = "none";
+        }
         let endpoint = document.getElementById('endpoint').value;
         fetch(endpoint)
           .then(function(response){
             if(response.status != 200){
-              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              document.getElementById("output").innerHTML = ("Network Error: " + response.status);
               return;
             }
             response.json().then(function(data){
@@ -107,13 +112,18 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        if(arguments[0] == 'show'){
+            document.getElementById("recordForm").style.display = "block";
+        }else{
+            document.getElementById("recordForm").style.display = "none";
+        }
         let endpoint = document.getElementById('endpoint').value;
         const id = window.prompt("Enter record id");
         let getOne = endpoint + "/" + id;
         fetch(getOne)
           .then(function(response){
             if(response.status != 200){
-              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              document.getElementById("output").innerHTML = ("Network Error: " + response.status);
               return;
             }
             response.json().then(function(data){
@@ -188,7 +198,7 @@
             body: JSON.stringify(jsonObj)
           }).then(function(response){
             if(response.status != 200){
-              document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+              document.getElementById("output").innerHTML = ("Network Error: " + response.status);
               return;
             }
             response.json().then(function(data){
@@ -219,7 +229,7 @@
           }
         }).then(function(response){
           if(response.status != 200){
-            document.getElementById("output").innerHTML = (response.statusText + " " + response.status);
+            document.getElementById("output").innerHTML = ("Network Error: " + response.status);
             return;
           }
           response.json().then(function(data){
